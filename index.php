@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Document</title>
+    <title>ACE blog</title>
     <style>
         body {
             padding: 10px;
@@ -61,6 +61,7 @@
             </div>
         </div>
     </div>
+    <?php include "includes/footer.php" ?>
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 
