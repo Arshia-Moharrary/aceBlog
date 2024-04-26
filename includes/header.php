@@ -31,3 +31,4 @@ if ($_SERVER["PHP_SELF"] == "/about.php") {
         </div>
     </div>
 </nav>
+<br>
