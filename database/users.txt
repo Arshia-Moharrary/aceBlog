@@ -1,0 +1,12 @@
+-- Query for create users table --
+
+CREATE TABLE users (
+	id INT(11) AUTO_INCREMENT,
+    username VARCHAR(32),
+    email VARCHAR(256),
+    pass VARCHAR(256),
+    created_date DATETIME DEFAULT CURRENT_TIME,
+    updated_date DATETIME DEFAULT NULL,
+    status ENUM("enable", "disable")
+    role VARCHAR(36),
+);
