@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 // For add 'ative' class to active link
 
 if ($_SERVER["PHP_SELF"] == "/index.php") {
@@ -27,9 +29,15 @@ if ($_SERVER["PHP_SELF"] == "/about.php") {
             <li><a href="/about.php" class="nav-link px-2 link-<?= $about ?>">About</a></li>
         </ul>
 
+        <?php if (!(isset($_SESSION["user_id"]))) { ?>
         <div class="col-md-3 text-end">
             <a class="btn btn-outline-primary me-2" href="users/login/">Login</a>
             <a class="btn btn-primary" href="users/signup/">Sign-up</a>
         </div>
+        <?php } else { ?>
+        <div class="col-md-3 text-end">
+            <a class="btn btn-success" href="/dashboard/">Profile</a>
+        </div>
+        <?php } ?>
     </header>
 </div>
