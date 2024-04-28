@@ -33,6 +33,7 @@ function test_input($input) {
 // Check user is not login
 if (isset($_SESSION["user_id"])) {
     echo error("You are logged in website, Please logout of your account to create a new account");
+    echo button("danger", "/", "Back to home");
     exit;
 }
 
@@ -98,8 +99,8 @@ if ($validate) {
     }
 
     // Email
-    if (strlen($email) < 17) {
-        $message["emailLength"] = "Your email is too small (more than 17 characters)";
+    if (strlen($email) < 11) {
+        $message["emailLength"] = "Your email is too small (more than 11 characters)";
     }
 
     // Password
@@ -107,7 +108,7 @@ if ($validate) {
         $message["passwordLength"] = "Your password is too small (more than 8 characters)";
     }
     
-    // Username exitst validate
+    // Username exist validate
     if (count($message) === 0) {
         // Start check operation
         try {
@@ -134,7 +135,7 @@ if ($validate) {
         }
     }
 
-    // Email exitst validate
+    // Email exist validate
     if (count($message) === 0) {
         // Start check operation
         try {
@@ -185,7 +186,7 @@ if (count($message) === 0) {
         $stmt->execute([$username, $email, $password, "enable", "user"]);
 
         echo success("Sign up successfully");
-        echo "<a href='/' class='btn btn-success'>Back to home</a>";
+        echo button("success", "/", "Back to home");
 
         // Set session for user
         $_SESSION["user_id"] = $conn->lastInsertId();
