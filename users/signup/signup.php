@@ -3,7 +3,7 @@
     body {
         padding: 10px;
     }
-</style>
+    </style>
 <?php
 
 // Start session
@@ -12,9 +12,12 @@ session_start();
 // Includes
 require_once "../../includes/ui.php";
 
+// Make connection
+require_once "../../includes/connection.php";
+
 // Check request method
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
-    echo "<div class='alert alert-danger'>Please signup from this <a href='/users/signup'>link</a></div>";
+    echo error("Please signup from this <a href='/users/signup'>link</a>");
     exit;
 }
 
@@ -29,7 +32,8 @@ function test_input($input) {
 
 // Check user is not login
 if (isset($_SESSION["user_id"])) {
-    echo "<div class='alert alert-danger'>You are logged in website, Please logout of your account to create a new account</div>";
+    echo error("You are logged in website, Please logout of your account to create a new account");
+    exit;
 }
 
 // Inputs
@@ -102,8 +106,60 @@ if ($validate) {
     if (strlen($password) < 8) {
         $message["passwordLength"] = "Your password is too small (more than 8 characters)";
     }
+    
+    // Username exitst validate
+    if (count($message) === 0) {
+        // Start check operation
+        try {
+            // Query
+            $sql = "SELECT username FROM users WHERE username = ?";
+    
+            // Set error mode
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+            // Prepare
+            $stmt = $conn->prepare($sql);
+    
+            // Bind param and execute
+            $stmt->execute([$username]);
+    
+            // Fetch result
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> and report bug) <");
+        }
+    
+        if ($result) {
+            $message["usernameExist"] = "This username already taken";
+        }
+    }
 
-
+    // Email exitst validate
+    if (count($message) === 0) {
+        // Start check operation
+        try {
+            // Query
+            $sql = "SELECT email FROM users WHERE email = ?";
+    
+            // Set error mode
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+            // Prepare
+            $stmt = $conn->prepare($sql);
+    
+            // Bind param and execute
+            $stmt->execute([$email]);
+    
+            // Fetch result
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> and report bug) <");
+        }
+    
+        if ($result) {
+            $message["emailExist"] = "This email already taken, Please <a href='/users/login/'>login</a>";
+        }
+    }
 }
 
 // Show messages
@@ -111,10 +167,9 @@ foreach ($message as $key => $val) {
     echo error($val);
 }
 
-if (count($message) === 0) {
-    // Make connection
-    require_once "../../includes/connection.php";
 
+
+if (count($message) === 0) {
     // Start signup operation
     try {
         // Query
