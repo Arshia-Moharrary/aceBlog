@@ -15,16 +15,12 @@
 
 <body>
     <p class="fw-bold fs-2">Sign up form</p>
-    <form class="row g-3" action="" method="post">
+    <form class="row g-3" action="/users/signup/signup.php" method="post">
         <div class="col-md-6">
-            <label for="firstNameInput" class="form-label">First name</label>
-            <input type="text" class="form-control" id="firstNameInput" name="firstName">
+            <label for="usernameInput" class="form-label">Username</label>
+            <input type="text" class="form-control" id="usernameInput" name="username">
         </div>
         <div class="col-md-6">
-            <label for="lastNameInput" class="form-label">Last name</label>
-            <input type="text" class="form-control" id="lastNameInput" name="lastName">
-        </div>
-        <div class="col-12">
             <label for="emailInput" class="form-label">Email</label>
             <input type="email" class="form-control" id="emailInput" name="email">
         </div>
