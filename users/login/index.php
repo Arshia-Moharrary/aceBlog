@@ -15,7 +15,7 @@
 
 <body>
     <p class="fw-bold fs-2">Login form</p>
-    <form class="row g-3" action="" method="post">
+    <form class="row g-3" action="/users/login/login.php" method="post">
         <div class="col-md-6">
             <label for="emailInput" class="form-label">Email</label>
             <input type="email" class="form-control" id="emailInput" name="email">
