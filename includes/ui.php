@@ -9,3 +9,8 @@ function error($val) {
 function success($val) {
     return "<div class='alert alert-success'>{$val}</div>";
 }
+
+// Return button
+function button($status, $link, $val) {
+    return "<a class='btn btn-{$status}' href='$link'>{$val}</a>";
+}
