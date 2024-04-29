@@ -1,16 +1,8 @@
 <?php session_start();
-include "../includes/ui.php" ?>
-<?php
+include "../includes/ui.php";
+include "../includes/role.php"; ?>
+<?php require_once "../includes/connection.php"; ?>
 
-// Check user is logged in
-if (!(isset($_SESSION["user_id"]))) {
-    echo "<link rel='stylesheet' href='../css/bootstrap.min.css'>";
-    echo "<style>body {padding: 10px;}</style>";
-    echo error("You aren't <a href='/users/login'>login</a>");
-    exit;
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,6 +18,18 @@ if (!(isset($_SESSION["user_id"]))) {
     </style>
 </head>
 
+<?php
+
+// Check user is logged in
+if (!(isset($_SESSION["user_id"]))) {
+    echo "<link rel='stylesheet' href='../css/bootstrap.min.css'>";
+    echo "<style>body {padding: 10px;}</style>";
+    echo error("You aren't <a href='/users/login'>login</a>");
+    exit;
+}
+
+?>
+
 <body>
     <?php include "../includes/header.php" ?>
     <div class="d-flex justify-content-center row g-1">
@@ -34,6 +38,19 @@ if (!(isset($_SESSION["user_id"]))) {
                 <a href="?section=account_detail" class="btn btn-info">Account detail</a>
             </div>
         </div>
+        <?php
+
+        $role = giveRole($_SESSION["user_id"]);
+
+        if ($role == "admin") {
+
+        ?>
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog" class="btn btn-warning">Blog</a>
+                </div>
+            </div>
+        <?php } ?>
         <div class="col-2">
             <div class="card col">
                 <a href="?section=logout" class="btn btn-danger">Logout</a>
@@ -42,9 +59,6 @@ if (!(isset($_SESSION["user_id"]))) {
     </div>
     <br>
     <?php
-
-    // Make connection
-    require_once "../includes/connection.php";
 
     try {
         // Query
@@ -67,33 +81,65 @@ if (!(isset($_SESSION["user_id"]))) {
 
     ?>
     <?php if (isset($_GET["section"]) && $_GET["section"] === "account_detail") { ?>
-    <!-- Account detail -->
-    <div class="d-flex justify-content-center">
-        <table class="table text-center">
-            <tbody>
-                <?php
+        <!-- Account detail -->
+        <div class="d-flex justify-content-center">
+            <table class="table text-center">
+                <tbody>
+                    <?php
 
-                foreach ($result as $key => $val) {
-                    $key = ucfirst($key);
-                    echo "<tr>";
-                    echo "<th scope='row'>{$key}</th>";
-                    echo "<td>{$val}</td>";
-                }
+                    foreach ($result as $key => $val) {
+                        $key = ucfirst($key);
+                        echo "<tr>";
+                        echo "<th scope='row'>{$key}</th>";
+                        echo "<td>{$val}</td>";
+                    }
 
-                ?>
-            </tbody>
-        </table>
-    </div>
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    <?php } ?>
+    <?php if (isset($_GET["section"]) && $_GET["section"] === "blog" && $role == "admin") { ?>
+        <p class="fs-2 fw-bold">Create blog</p>
+        <form action="">
+            <div class="mb-3">
+                <label for="blogTitle" class="form-label">Blog title</label>
+                <input type="email" class="form-control" id="blogTitle">
+            </div>
+            <div class="mb-3">
+                <label for="coverBlog" class="form-label">Blog cover</label>
+                <input class="form-control" type="file" id="coverBlog">
+            </div>
+            <div class="mb-3">
+                <label for="blogContent" class="form-label">Blog content (for new line: \n)</label>
+                <textarea class="form-control" id="blogContent" rows="8"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="blogTags" class="form-label">Blog tags</label>
+                <input type="text" class="form-control" id="blogTags" placeholder="tag1,tag2 (seperate with comma without any space)">
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="publishBlog">
+                    <label class="form-check-label" for="publishBlog">
+                        Publish when created
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-warning" name="sign">Create</button>
+            </div>
+        </form>
     <?php } ?>
     <?php
-    
+
     if (!(isset($_GET["section"]))) {
         echo "<p class='text-center opacity-75'>Nothing to show, select a section :)</p>";
     }
 
     ?>
     <?php
-    
+
     // Logout
     if (isset($_GET["section"]) && $_GET["section"] === "logout") {
         session_destroy();
