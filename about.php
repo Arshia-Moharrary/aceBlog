@@ -22,7 +22,7 @@
         <div class="text-center fs-2">
             Hi 👋, I'm arshia.<br>
             I'm a junior back-end developer.<br>
-            I'm 13 and I love programming.<br>
+            I'm 14 and I love programming.<br>
             Thanks for watching my project.<br>
         </div>
         <a href="https://www.github.com/Arshia-Moharrary" class="text-body"><i class="bi bi-github fs-1"></i></a>
