@@ -1,7 +1,4 @@
 <?php
-
-session_start();
-
 // For add 'ative' class to active link
 
 if ($_SERVER["PHP_SELF"] == "/index.php") {
