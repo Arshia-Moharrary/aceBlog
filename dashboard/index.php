@@ -20,6 +20,22 @@ include "../includes/role.php"; ?>
 
 <?php
 
+// Sanitize inputs (Reference from w3schools)
+function test_input($input) {
+    $input = trim($input);
+    $input = stripslashes($input);
+    $input = htmlspecialchars($input);
+    return $input;
+}
+
+if (isset($_GET["section"])) {
+    $section = test_input($_GET["section"]);
+}
+
+?>
+
+<?php
+
 // Check user is logged in
 if (!(isset($_SESSION["user_id"]))) {
     echo "<link rel='stylesheet' href='../css/bootstrap.min.css'>";
@@ -80,7 +96,7 @@ if (!(isset($_SESSION["user_id"]))) {
     }
 
     ?>
-    <?php if (isset($_GET["section"]) && $_GET["section"] === "account_detail") { ?>
+    <?php if (isset($section) && $section === "account_detail") { ?>
         <!-- Account detail -->
         <div class="d-flex justify-content-center">
             <table class="table text-center">
@@ -99,41 +115,41 @@ if (!(isset($_SESSION["user_id"]))) {
             </table>
         </div>
     <?php } ?>
-    <?php if (isset($_GET["section"]) && $_GET["section"] === "blog" && $role == "admin") { ?>
+    <?php if (isset($section) && $section === "blog" && $role == "admin") { ?>
         <p class="fs-2 fw-bold">Create blog</p>
-        <form action="">
+        <form action="../blogs/create.php" enctype="multipart/form-data" method="post">
             <div class="mb-3">
                 <label for="blogTitle" class="form-label">Blog title</label>
-                <input type="email" class="form-control" id="blogTitle">
+                <input type="text" class="form-control" id="blogTitle" name="title">
             </div>
             <div class="mb-3">
                 <label for="coverBlog" class="form-label">Blog cover</label>
-                <input class="form-control" type="file" id="coverBlog">
+                <input class="form-control" type="file" id="coverBlog" name="image">
             </div>
             <div class="mb-3">
-                <label for="blogContent" class="form-label">Blog content (for new line: \n)</label>
-                <textarea class="form-control" id="blogContent" rows="8"></textarea>
+                <label for="blogContent" class="form-label">Blog content</label>
+                <textarea class="form-control" id="blogContent" rows="8" name="content"></textarea>
             </div>
             <div class="mb-3">
                 <label for="blogTags" class="form-label">Blog tags</label>
-                <input type="text" class="form-control" id="blogTags" placeholder="tag1,tag2 (seperate with comma without any space)">
+                <input type="text" class="form-control" id="blogTags" placeholder="tag1,tag2 (seperate with comma without any space)" name="tags">
             </div>
             <div class="mb-3">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="publishBlog">
+                    <input class="form-check-input" type="checkbox" value="" id="publishBlog" name="publish">
                     <label class="form-check-label" for="publishBlog">
                         Publish when created
                     </label>
                 </div>
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-warning" name="sign">Create</button>
+                <button type="submit" class="btn btn-warning">Create</button>
             </div>
         </form>
     <?php } ?>
     <?php
 
-    if (!(isset($_GET["section"]))) {
+    if (!(isset($section))) {
         echo "<p class='text-center opacity-75'>Nothing to show, select a section :)</p>";
     }
 
@@ -141,7 +157,7 @@ if (!(isset($_SESSION["user_id"]))) {
     <?php
 
     // Logout
-    if (isset($_GET["section"]) && $_GET["section"] === "logout") {
+    if (isset($section) && $section === "logout") {
         session_destroy();
         header("Location: /");
     }
