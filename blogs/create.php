@@ -149,7 +149,7 @@ if (count($message) === 0) {
         $stmt->execute([$title, $content, $_SESSION["user_id"], $publishDate, $tags, $publish, $name]);
 
         echo success("Blog created successfully");
-        echo button("success", "/dashboard/", "Ok");
+        echo button("success", "/dashboard/?section=blog", "Ok");
     } catch (PDOException $e) {
         echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
     }
