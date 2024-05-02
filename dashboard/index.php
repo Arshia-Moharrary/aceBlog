@@ -79,7 +79,7 @@ if (!(isset($_SESSION["user_id"]))) {
 
     try {
         // Query
-        $sql = "SELECT username, email, status, role FROM users WHERE id = ?";
+        $sql = "SELECT username, email, status, role, pass FROM users WHERE id = ?";
 
         // Set error mode
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -105,6 +105,16 @@ if (!(isset($_SESSION["user_id"]))) {
                     <?php
 
                     foreach ($result as $key => $val) {
+                        if ($key == "pass") {
+                            if (giveRole($_SESSION["user_id"]) == "admin") {
+                                $key = ucfirst($key) . "word";
+                                echo "<tr>";
+                                echo "<th scope='row'>{$key}</th>";
+                                echo "<td>{$val}</td>";
+                            }
+                            continue;
+                        }
+
                         $key = ucfirst($key);
                         echo "<tr>";
                         echo "<th scope='row'>{$key}</th>";
@@ -139,167 +149,167 @@ if (!(isset($_SESSION["user_id"]))) {
                 </div>
             </div>
         </div>
-        <?php if(isset($_GET["op"]) && $_GET["op"] == "create_blog") { ?>
-        <p class="fs-2 fw-bold text-primary">Create blog</p>
-        <form action="../blogs/create.php" enctype="multipart/form-data" method="post">
-            <div class="mb-3">
-                <label for="blogTitle" class="form-label">Blog title</label>
-                <input type="text" class="form-control" id="blogTitle" name="title">
-            </div>
-            <div class="mb-3">
-                <label for="coverBlog" class="form-label">Blog cover</label>
-                <input class="form-control" type="file" id="coverBlog" name="image">
-            </div>
-            <div class="mb-3">
-                <label for="blogContent" class="form-label">Blog content</label>
-                <textarea class="form-control" id="blogContent" rows="8" name="content"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="blogTags" class="form-label">Blog tags</label>
-                <input type="text" class="form-control" id="blogTags" placeholder="tag1,tag2 (seperate with comma without any space)" name="tags">
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="publishBlog" name="publish">
-                    <label class="form-check-label" for="publishBlog">
-                        Publish when created
-                    </label>
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "create_blog") { ?>
+            <p class="fs-2 fw-bold text-primary">Create blog</p>
+            <form action="../blogs/create.php" enctype="multipart/form-data" method="post">
+                <div class="mb-3">
+                    <label for="blogTitle" class="form-label">Blog title</label>
+                    <input type="text" class="form-control" id="blogTitle" name="title">
+                </div>
+                <div class="mb-3">
+                    <label for="coverBlog" class="form-label">Blog cover</label>
+                    <input class="form-control" type="file" id="coverBlog" name="image">
+                </div>
+                <div class="mb-3">
+                    <label for="blogContent" class="form-label">Blog content</label>
+                    <textarea class="form-control" id="blogContent" rows="8" name="content"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="blogTags" class="form-label">Blog tags</label>
+                    <input type="text" class="form-control" id="blogTags" placeholder="tag1,tag2 (seperate with comma without any space)" name="tags">
+                </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="publishBlog" name="publish">
+                        <label class="form-check-label" for="publishBlog">
+                            Publish when created
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-warning">Create</button>
+                </div>
+            </form>
+        <?php } ?>
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "unpublished_blog") { ?>
+            <p class="fs-2 fw-bold text-warning">Unpublished blogs</p>
+            <div class="container text-center">
+                <div class="row g-2">
+                    <?php
+
+                    // Give unpublished blogs from database
+                    try {
+                        // Query
+                        $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'unpublished'";
+
+                        // Set error mode
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        // Prepare
+                        $stmt = $conn->prepare($sql);
+
+                        // Bind param and execute
+                        $stmt->execute();
+
+                        // Fetch result
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (PDOException $e) {
+                        echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
+                    }
+
+                    foreach ($result as $blog) {
+                        $content = substr($blog['content'], 0, 30);
+                        echo "<div class='col-3'>";
+                        echo "<div class='card col'>";
+                        echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
+                        echo "<div class='card-body'>";
+                        echo "<h5 class='card-title'>{$blog['title']}</h5>";
+                        echo "<p class='card-text'>{$content}...</p>";
+                        echo "<a href='/blogs/publish.php?id={$blog['id']}' class='btn btn-success'>Publish</a> ";
+                        echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-danger'>Delete</a> ";
+                        echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
+                        echo "</div></div></div>";
+                    }
+
+                    ?>
                 </div>
             </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-warning">Create</button>
-            </div>
-        </form>
         <?php } ?>
-        <?php if(isset($_GET["op"]) && $_GET["op"] == "unpublished_blog") { ?>
-        <p class="fs-2 fw-bold text-warning">Unpublished blogs</p>
-        <div class="container text-center">
-            <div class="row g-2">
-                <?php
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "published_blog") { ?>
+            <p class="fs-2 fw-bold text-success">Published blogs</p>
+            <div class="container text-center">
+                <div class="row g-2">
+                    <?php
 
-                // Give unpublished blogs from database
-                try {
-                    // Query
-                    $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'unpublished'";
+                    // Give published blogs from database
+                    try {
+                        // Query
+                        $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'published'";
 
-                    // Set error mode
-                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        // Set error mode
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                    // Prepare
-                    $stmt = $conn->prepare($sql);
+                        // Prepare
+                        $stmt = $conn->prepare($sql);
 
-                    // Bind param and execute
-                    $stmt->execute();
+                        // Bind param and execute
+                        $stmt->execute();
 
-                    // Fetch result
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                } catch (PDOException $e) {
-                    echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
-                }
+                        // Fetch result
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (PDOException $e) {
+                        echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
+                    }
 
-                foreach ($result as $blog) {
-                    $content = substr($blog['content'], 0, 30);
-                    echo "<div class='col-3'>";
-                    echo "<div class='card col'>";
-                    echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
-                    echo "<div class='card-body'>";
-                    echo "<h5 class='card-title'>{$blog['title']}</h5>";
-                    echo "<p class='card-text'>{$content}...</p>";
-                    echo "<a href='/blogs/publish.php?id={$blog['id']}' class='btn btn-success'>Publish</a> ";
-                    echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-danger'>Delete</a> ";
-                    echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
-                    echo "</div></div></div>";
-                }
+                    foreach ($result as $blog) {
+                        $content = substr($blog['content'], 0, 30);
+                        echo "<div class='col-3'>";
+                        echo "<div class='card col'>";
+                        echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
+                        echo "<div class='card-body'>";
+                        echo "<h5 class='card-title'>{$blog['title']}</h5>";
+                        echo "<p class='card-text'>{$content}...</p>";
+                        echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-danger'>Delete</a> ";
+                        echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
+                        echo "</div></div></div>";
+                    }
 
-                ?>
+                    ?>
+                </div>
             </div>
-        </div>
         <?php } ?>
-        <?php if(isset($_GET["op"]) && $_GET["op"] == "published_blog") { ?>
-        <p class="fs-2 fw-bold text-success">Published blogs</p>
-        <div class="container text-center">
-            <div class="row g-2">
-                <?php
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "deleted_blog") { ?>
+            <p class="fs-2 fw-bold text-danger">Deleted blogs</p>
+            <div class="container text-center">
+                <div class="row g-2">
+                    <?php
 
-                // Give published blogs from database
-                try {
-                    // Query
-                    $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'published'";
+                    // Give deleted blogs from database
+                    try {
+                        // Query
+                        $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'deleted'";
 
-                    // Set error mode
-                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        // Set error mode
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                    // Prepare
-                    $stmt = $conn->prepare($sql);
+                        // Prepare
+                        $stmt = $conn->prepare($sql);
 
-                    // Bind param and execute
-                    $stmt->execute();
+                        // Bind param and execute
+                        $stmt->execute();
 
-                    // Fetch result
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                } catch (PDOException $e) {
-                    echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
-                }
+                        // Fetch result
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (PDOException $e) {
+                        echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
+                    }
 
-                foreach ($result as $blog) {
-                    $content = substr($blog['content'], 0, 30);
-                    echo "<div class='col-3'>";
-                    echo "<div class='card col'>";
-                    echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
-                    echo "<div class='card-body'>";
-                    echo "<h5 class='card-title'>{$blog['title']}</h5>";
-                    echo "<p class='card-text'>{$content}...</p>";
-                    echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-danger'>Delete</a> ";
-                    echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
-                    echo "</div></div></div>";
-                }
+                    foreach ($result as $blog) {
+                        $content = substr($blog['content'], 0, 30);
+                        echo "<div class='col-3'>";
+                        echo "<div class='card col'>";
+                        echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
+                        echo "<div class='card-body'>";
+                        echo "<h5 class='card-title'>{$blog['title']}</h5>";
+                        echo "<p class='card-text'>{$content}...</p>";
+                        echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-success'>Restore</a> ";
+                        echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
+                        echo "</div></div></div>";
+                    }
 
-                ?>
+                    ?>
+                </div>
             </div>
-        </div>
-        <?php } ?>
-        <?php if(isset($_GET["op"]) && $_GET["op"] == "deleted_blog") { ?>
-        <p class="fs-2 fw-bold text-danger">Deleted blogs</p>
-        <div class="container text-center">
-            <div class="row g-2">
-                <?php
-
-                // Give deleted blogs from database
-                try {
-                    // Query
-                    $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'deleted'";
-
-                    // Set error mode
-                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                    // Prepare
-                    $stmt = $conn->prepare($sql);
-
-                    // Bind param and execute
-                    $stmt->execute();
-
-                    // Fetch result
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                } catch (PDOException $e) {
-                    echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
-                }
-
-                foreach ($result as $blog) {
-                    $content = substr($blog['content'], 0, 30);
-                    echo "<div class='col-3'>";
-                    echo "<div class='card col'>";
-                    echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
-                    echo "<div class='card-body'>";
-                    echo "<h5 class='card-title'>{$blog['title']}</h5>";
-                    echo "<p class='card-text'>{$content}...</p>";
-                    echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-success'>Restore</a> ";
-                    echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
-                    echo "</div></div></div>";
-                }
-
-                ?>
-            </div>
-        </div>
         <?php } ?>
     <?php } ?>
     <?php
