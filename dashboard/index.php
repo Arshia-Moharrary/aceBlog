@@ -194,7 +194,7 @@ if (!(isset($_SESSION["user_id"]))) {
             <div class="row g-2">
                 <?php
 
-                // Give unpublished blogs from database
+                // Give published blogs from database
                 try {
                     // Query
                     $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'published'";
@@ -235,7 +235,7 @@ if (!(isset($_SESSION["user_id"]))) {
             <div class="row g-2">
                 <?php
 
-                // Give unpublished blogs from database
+                // Give deleted blogs from database
                 try {
                     // Query
                     $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'deleted'";
