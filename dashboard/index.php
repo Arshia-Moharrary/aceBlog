@@ -117,7 +117,30 @@ if (!(isset($_SESSION["user_id"]))) {
         </div>
     <?php } ?>
     <?php if (isset($section) && $section === "blog" && $role == "admin") { ?>
-        <p class="fs-2 fw-bold">Create blog</p>
+        <div class="d-flex justify-content-center row g-1">
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=create_blog" class="btn btn-primary">Create blog</a>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=published_blog" class="btn btn-success">Published blog</a>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=deleted_blog" class="btn btn-danger">Deleted blog</a>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=unpublished_blog" class="btn btn-warning">Unpublished blog</a>
+                </div>
+            </div>
+        </div>
+        <?php if(isset($_GET["op"]) && $_GET["op"] == "create_blog") { ?>
+        <p class="fs-2 fw-bold text-primary">Create blog</p>
         <form action="../blogs/create.php" enctype="multipart/form-data" method="post">
             <div class="mb-3">
                 <label for="blogTitle" class="form-label">Blog title</label>
@@ -147,6 +170,8 @@ if (!(isset($_SESSION["user_id"]))) {
                 <button type="submit" class="btn btn-warning">Create</button>
             </div>
         </form>
+        <?php } ?>
+        <?php if(isset($_GET["op"]) && $_GET["op"] == "unpublished_blog") { ?>
         <p class="fs-2 fw-bold text-warning">Unpublished blogs</p>
         <div class="container text-center">
             <div class="row g-2">
@@ -189,6 +214,8 @@ if (!(isset($_SESSION["user_id"]))) {
                 ?>
             </div>
         </div>
+        <?php } ?>
+        <?php if(isset($_GET["op"]) && $_GET["op"] == "published_blog") { ?>
         <p class="fs-2 fw-bold text-success">Published blogs</p>
         <div class="container text-center">
             <div class="row g-2">
@@ -230,6 +257,8 @@ if (!(isset($_SESSION["user_id"]))) {
                 ?>
             </div>
         </div>
+        <?php } ?>
+        <?php if(isset($_GET["op"]) && $_GET["op"] == "deleted_blog") { ?>
         <p class="fs-2 fw-bold text-danger">Deleted blogs</p>
         <div class="container text-center">
             <div class="row g-2">
@@ -271,6 +300,7 @@ if (!(isset($_SESSION["user_id"]))) {
                 ?>
             </div>
         </div>
+        <?php } ?>
     <?php } ?>
     <?php
 
