@@ -32,7 +32,7 @@ require_once "includes/connection.php";
             // Give published blogs from database
             try {
                 // Query
-                $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'published'";
+                $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'published' ORDER BY published_date DESC";
 
                 // Set error mode
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
