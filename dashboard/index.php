@@ -302,7 +302,7 @@ if (!(isset($_SESSION["user_id"]))) {
                         echo "<div class='card-body'>";
                         echo "<h5 class='card-title'>{$blog['title']}</h5>";
                         echo "<p class='card-text'>{$content}...</p>";
-                        echo "<a href='/blogs/delete.php?id={$blog['id']}' class='btn btn-success'>Restore</a> ";
+                        echo "<a href='/blogs/restore.php?id={$blog['id']}' class='btn btn-success'>Restore</a> ";
                         echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
                         echo "</div></div></div>";
                     }
