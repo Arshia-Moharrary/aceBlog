@@ -72,6 +72,9 @@ try {
     echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/'>me</a> to report bug)");
 }
 
+// Explode tags
+$tags = explode(",", $result["tags"]);
+
 ?>
 
 <!DOCTYPE html>
@@ -106,6 +109,15 @@ try {
     <div class="pre-scrollable">
         <p class="fs-4" style="white-space: pre-wrap; word-wrap: break-word;"><?= $result['content'] ?></p>
     </div>
+    <br>
+    <p class="fs-3 fw-semibold">Tags:</p>
+    <?php
+
+    foreach($tags as $tag) {
+        echo "<span class='btn btn-secondary'>#{$tag}</span> ";
+    }
+
+    ?>
     <br>
     <?php include "../includes/footer.php" ?>
 </body>
