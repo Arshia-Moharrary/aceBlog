@@ -60,8 +60,13 @@ if (!(isset($_SESSION["user_id"]))) {
         $role = giveRole($_SESSION["user_id"]);
 
         if ($role == "admin") {
-
         ?>
+
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=user" class="btn btn-primary">User</a>
+                </div>
+            </div>
             <div class="col-2">
                 <div class="card col">
                     <a href="?section=blog" class="btn btn-warning">Blog</a>
@@ -127,25 +132,26 @@ if (!(isset($_SESSION["user_id"]))) {
         </div>
     <?php } ?>
     <?php if (isset($section) && $section === "blog" && $role == "admin") { ?>
+        <p class="fs-3 fw-semibolg text-center">Operations</p>
         <div class="d-flex justify-content-center row g-1">
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=create_blog" class="btn btn-primary">Create blog</a>
+                    <a href="?section=blog&op=create_blog" class="btn btn-primary">Create</a>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=published_blog" class="btn btn-success">Published blog</a>
+                    <a href="?section=blog&op=published_blog" class="btn btn-success">Published</a>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=deleted_blog" class="btn btn-danger">Deleted blog</a>
+                    <a href="?section=blog&op=deleted_blog" class="btn btn-danger">Deleted</a>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=unpublished_blog" class="btn btn-warning">Unpublished blog</a>
+                    <a href="?section=blog&op=unpublished_blog" class="btn btn-warning">Unpublished</a>
                 </div>
             </div>
         </div>
@@ -311,6 +317,78 @@ if (!(isset($_SESSION["user_id"]))) {
                 </div>
             </div>
         <?php } ?>
+    <?php } ?>
+    <?php if (isset($_GET["section"]) && $_GET["section"] === "user" && $role === "admin") { ?>
+        <p class="fs-3 fw-semibolg text-center">Operations</p>
+        <div class="d-flex justify-content-center row g-1">
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=create_blog" class="btn btn-success">Enable</a>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=create_blog" class="btn btn-danger">Disable</a>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card col">
+                    <a href="?section=blog&op=create_blog" class="btn btn-warning">Role</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <p class="fs-3 fw-semibolg text-center">Users</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Created date</th>
+                    <th scope="col">Updated date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                
+                try {
+                    // Query
+                    $sql = "SELECT * FROM users";
+
+                    // Set error mode
+                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                    // Prepare
+                    $stmt = $conn->prepare($sql);
+
+                    // Bind param and execute
+                    $stmt->execute();
+
+                    // Fetch result
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } catch (PDOException $e) {
+                    echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> and report bug)");
+                }
+
+                foreach($result as $user) {
+                    echo "<tr>";
+                    foreach($user as $key => $val) {
+                        if ($key == "id") {
+                            echo "<th scope='row'>{$val}</th>";
+                            continue;
+                        }
+                        echo "<td>{$val}</td>";
+                    }
+                    echo "</tr>";
+                }
+
+                ?>
+            </tbody>
+        </table>
     <?php } ?>
     <?php
 
