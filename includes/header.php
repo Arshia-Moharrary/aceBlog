@@ -28,7 +28,7 @@ if ($_SERVER["PHP_SELF"] == "/about.php") {
 
         <?php if (!(isset($_SESSION["user_id"]))) { ?>
         <div class="col-md-3 text-end">
-            <a class="btn btn-outline-primary me-2" href="users/login/">Login</a>
+            <a class="btn btn-outline-primary me-2" href="/users/login/">Login</a>
             <a class="btn btn-primary" href="users/signup/">Sign-up</a>
         </div>
         <?php } else { ?>
