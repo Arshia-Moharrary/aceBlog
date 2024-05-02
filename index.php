@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php
+session_start();
+include "includes/ui.php";
+include "includes/role.php";
+require_once "includes/connection.php";
+
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -21,46 +27,41 @@
     <p class="fs-2 text-center">Blogs</p>
     <div class="container text-center">
         <div class="row g-2">
-            <div class="col-3">
-                <div class="card col">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4UeEjjERyEVTOIaXIKHlj7snPZAKulH5-z1Kau1lsw&s" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">First blog</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, in.</p>
-                        <a href="#" class="btn btn-primary">Read</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card col">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4UeEjjERyEVTOIaXIKHlj7snPZAKulH5-z1Kau1lsw&s" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">First blog</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, in.</p>
-                        <a href="#" class="btn btn-primary">Read</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card col">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4UeEjjERyEVTOIaXIKHlj7snPZAKulH5-z1Kau1lsw&s" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">First blog</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, in.</p>
-                        <a href="#" class="btn btn-primary">Read</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card col">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4UeEjjERyEVTOIaXIKHlj7snPZAKulH5-z1Kau1lsw&s" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">First blog</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, in.</p>
-                        <a href="#" class="btn btn-primary">Read</a>
-                    </div>
-                </div>
-            </div>
+            <?php
+
+            // Give published blogs from database
+            try {
+                // Query
+                $sql = "SELECT id, title, content, featured_image FROM blogs WHERE status = 'published'";
+
+                // Set error mode
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                // Prepare
+                $stmt = $conn->prepare($sql);
+
+                // Bind param and execute
+                $stmt->execute();
+
+                // Fetch result
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> to report bug)");
+            }
+
+            foreach ($result as $blog) {
+                $content = substr($blog['content'], 0, 70);
+                echo "<div class='col-3'>";
+                echo "<div class='card col'>";
+                echo "<img src='/uploads/{$blog['featured_image']}' class='card-img-top' style='width=13rem; height: 13rem; object-fit: cover;'>";
+                echo "<div class='card-body'>";
+                echo "<h5 class='card-title'>{$blog['title']}</h5>";
+                echo "<p class='card-text'>{$content}...</p>";
+                echo "<a href='/blogs/blog.php?id={$blog['id']}' class='btn btn-primary'>Read</a>";
+                echo "</div></div></div>";
+            }
+
+            ?>
         </div>
     </div>
     <?php include "includes/footer.php" ?>
