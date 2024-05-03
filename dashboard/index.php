@@ -323,72 +323,102 @@ if (!(isset($_SESSION["user_id"]))) {
         <div class="d-flex justify-content-center row g-1">
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=create_blog" class="btn btn-success">Enable</a>
+                    <a href="?section=user&op=users" class="btn btn-primary">Users</a>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=create_blog" class="btn btn-danger">Disable</a>
+                    <a href="?section=user&op=enable_user" class="btn btn-success">Enable</a>
                 </div>
             </div>
             <div class="col-2">
                 <div class="card col">
-                    <a href="?section=blog&op=create_blog" class="btn btn-warning">Role</a>
+                    <a href="?section=user&op=disable_user" class="btn btn-danger">Disable</a>
                 </div>
             </div>
         </div>
         <br>
-        <p class="fs-3 fw-semibolg text-center">Users</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Password</th>
-                    <th scope="col">Created date</th>
-                    <th scope="col">Updated date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                
-                try {
-                    // Query
-                    $sql = "SELECT * FROM users";
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "users") { ?>
+            <p class="fs-3 fw-semibolg text-center">Users</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Created date</th>
+                        <th scope="col">Updated date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 
-                    // Set error mode
-                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    try {
+                        // Query
+                        $sql = "SELECT * FROM users";
 
-                    // Prepare
-                    $stmt = $conn->prepare($sql);
+                        // Set error mode
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                    // Bind param and execute
-                    $stmt->execute();
+                        // Prepare
+                        $stmt = $conn->prepare($sql);
 
-                    // Fetch result
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                } catch (PDOException $e) {
-                    echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> and report bug)");
-                }
+                        // Bind param and execute
+                        $stmt->execute();
 
-                foreach($result as $user) {
-                    echo "<tr>";
-                    foreach($user as $key => $val) {
-                        if ($key == "id") {
-                            echo "<th scope='row'>{$val}</th>";
-                            continue;
-                        }
-                        echo "<td>{$val}</td>";
+                        // Fetch result
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (PDOException $e) {
+                        echo error("It was problem `{$e->getMessage()}` (Please contact with <a href='https://www.github.com/Arshia-Moharrary/aceBlog'>me</a> and report bug)");
                     }
-                    echo "</tr>";
-                }
 
-                ?>
-            </tbody>
-        </table>
+                    foreach ($result as $user) {
+                        echo "<tr>";
+                        foreach ($user as $key => $val) {
+                            if ($key == "id") {
+                                echo "<th scope='row'>{$val}</th>";
+                                continue;
+                            }
+                            echo "<td>{$val}</td>";
+                        }
+                        echo "</tr>";
+                    }
+
+                    ?>
+                </tbody>
+            </table>
+        <?php } ?>
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "disable_user") { ?>
+            <form class="row row-cols-lg-auto g-3 align-items-center d-flex justify-content-center row g-1" method="post" action="/users/admin-op/disable.php">
+                <div class="col-12">
+                    <label class="visually-hidden" for="userID">ID</label>
+                    <div class="input-group">
+                        <div class="input-group-text">#</div>
+                        <input type="text" class="form-control" id="userID" placeholder="User ID" name="id">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-danger">Disable</button>
+                </div>
+            </form>
+        <?php } ?>
+        <?php if (isset($_GET["op"]) && $_GET["op"] == "enable_user") { ?>
+            <form class="row row-cols-lg-auto g-3 align-items-center d-flex justify-content-center row g-1" method="post" action="/users/admin-op/enable.php">
+                <div class="col-12">
+                    <label class="visually-hidden" for="userID">ID</label>
+                    <div class="input-group">
+                        <div class="input-group-text">#</div>
+                        <input type="text" class="form-control" id="userID" placeholder="User ID" name="id">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">Enable</button>
+                </div>
+            </form>
+        <?php } ?>  
     <?php } ?>
     <?php
 
