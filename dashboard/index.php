@@ -335,7 +335,7 @@ if (!(isset($_SESSION["user_id"]))) {
                 <div class="card col">
                     <a href="?section=user&op=disable_user" class="btn btn-danger">Disable</a>
                 </div>
-            </div>
+            </div>  
         </div>
         <br>
         <?php if (isset($_GET["op"]) && $_GET["op"] == "users") { ?>
