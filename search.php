@@ -3,8 +3,16 @@
 include "includes/ui.php";
 require_once "includes/connection.php";
 
-$q = $_GET["q"];
-$qd = "%" . $_GET["q"] . "%";
+// Sanitize inputs (Reference from w3schools)
+function test_input($input) {
+    $input = trim($input);
+    $input = stripslashes($input);
+    $input = htmlspecialchars($input);
+    return $input;
+}
+
+$q = test_input($_GET["q"]);
+$qd = "%" . $q . "%";
 
 try {
     // Query
