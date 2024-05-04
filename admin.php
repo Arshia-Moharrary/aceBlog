@@ -48,10 +48,10 @@ session_start();
 
 if (isset($_POST)) {
     // Includes
-    include "../../includes/ui.php";
+    include "includes/ui.php";
 
     // Make connection
-    require_once "../../includes/connection.php";
+    require_once "includes/connection.php";
 
     // Sanitize inputs (Reference from w3schools)
     function test_input($input)
