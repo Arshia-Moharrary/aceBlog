@@ -33,4 +33,7 @@ Open this address in the browser and create a admin account:<br>
 ## 7 - Delete some file for security reason
 Delete dbc.php and admin.php files so that normal users cannot access them
 ## 8 - Create a directory for uploaded files
-In the aceBlog create a directory with <b>uploads</b> name for upload image to this directory
+```bash
+cd aceBlog
+mkdir uploads
+```
