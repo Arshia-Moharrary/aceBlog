@@ -48,7 +48,7 @@ session_start();
 
 if (isset($_POST)) {
     // Includes
-    require_once "../../includes/ui.php";
+    include "../../includes/ui.php";
 
     // Make connection
     require_once "../../includes/connection.php";
