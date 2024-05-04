@@ -29,6 +29,6 @@ Open this address in the browser:<br>
 and click on config button
 ## 6 - Create first admin account
 Open this address in the browser and create a admin account:<br>
-[http://localhost:9000/dbc.php](http://localhost:9000/admin.php)
+[http://localhost:9000/admin.php](http://localhost:9000/admin.php)
 ## 7 - Delete some file for security reason
 Delete dbc.php and admin.php files so that normal users cannot access them
