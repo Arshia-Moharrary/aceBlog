@@ -31,7 +31,7 @@ include "includes/ui.php";
 
 if (isset($_POST["conf"])) {
     // Includes
-    include "dbinfo.php";
+    include "includes/dbinfo.php";
 
     // Start connection operation
     try {
