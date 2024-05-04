@@ -84,7 +84,8 @@ if (isset($_POST["conf"])) {
             created_date DATETIME DEFAULT CURRENT_TIME,
             updated_date DATETIME DEFAULT NULL,
             status ENUM('enable', 'disable'),
-            role ENUM('admin', 'user')
+            role ENUM('admin', 'user'),
+            PRIMARY KEY (id)
         );";
 
         // Set error mode
