@@ -46,7 +46,7 @@
 // Start session
 session_start();
 
-if (isset($_POST)) {
+if (isset($_POST["sign"])) {
     // Includes
     include "includes/ui.php";
 
