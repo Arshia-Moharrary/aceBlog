@@ -36,10 +36,10 @@ if (isset($_POST["conf"])) {
     // Start connection operation
     try {
         // Make connection
-        $conn = new PDO("{$rdbms}:host={$host}", $serverUsername, $serverPassword);
+        $pdo = new PDO("{$rdbms}:host={$host}", $serverUsername, $serverPassword);
 
         // Set error mode for catch block
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Optional
         // echo success("Connected successfully");
@@ -56,16 +56,22 @@ if (isset($_POST["conf"])) {
         $sql = "CREATE DATABASE {$database}";
 
         // Set error mode
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Prepare
-        $stmt = $conn->prepare($sql);
+        $stmt = $pdo->prepare($sql);
 
         // Execute
         $stmt->execute();
     } catch (PDOException $e) {
         $message["database"] = "Can't create database: {$e->getMessage()}";
     }
+
+    // Close fist connection
+    $pdo = null;
+
+    // Make connection
+    require_once "includes/connection.php";
 
     // Create user table
     try {
