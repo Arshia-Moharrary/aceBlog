@@ -9,7 +9,7 @@ sudo apt install php
 sudo apt install mysql
 ```
 ## 3 - Config database connection
-Open aceBlog > includes > connection.php and edit these variables
+Open aceBlog > includes > dbinfo.php and edit these variables
 ```php
 // Database info
 $rdbms = "mysql"; // Your rdbms like: mysql, microsoft sql, sql server and ...
