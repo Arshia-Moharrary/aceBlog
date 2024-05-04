@@ -38,4 +38,4 @@ cd aceBlog
 mkdir uploads
 ```
 # I have a problem or suggestion
-Contact with arshia.moharrary@gmail.como or create a pull request
+Contact with arshia.moharrary@gmail.com or create a pull request
