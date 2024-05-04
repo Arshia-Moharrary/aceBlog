@@ -23,7 +23,7 @@ Open aceBlog directory and run this command
 ```bash
 php -S localhost:9000
 ```
-## 5 - Config databse (create db and tables)
+## 5 - Config database (create db and tables)
 Open this address in the browser:<br>
 [http://localhost:9000/dbc.php](http://localhost:9000/dbc.php)
 and click on config button
