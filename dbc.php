@@ -20,11 +20,14 @@
             <button type="submit" class="btn btn-primary" name="conf" id="config">Config</button>
         </div>
     </form>
+    <br>
 </body>
 
 </html>
 
 <?php
+
+include "includes/ui.php";
 
 if (isset($_POST["conf"])) {
     // Make connection
@@ -60,8 +63,8 @@ if (isset($_POST["conf"])) {
             pass VARCHAR(256),
             created_date DATETIME DEFAULT CURRENT_TIME,
             updated_date DATETIME DEFAULT NULL,
-            status ENUM('enable', 'disable')
-            role ENUM('admin', 'user'),
+            status ENUM('enable', 'disable'),
+            role ENUM('admin', 'user')
         );";
 
         // Set error mode
@@ -104,5 +107,15 @@ if (isset($_POST["conf"])) {
         $stmt->execute();
     } catch (PDOException $e) {
         $message["blog"] = "Can't create blog table: {$e->getMessage()}";
+    }
+
+    // Success message
+    if (count($message) === 0) {
+        echo success("Database config successfully");
+    } else {
+        // Show messages
+        foreach ($message as $error) {
+            echo error($error);
+        }
     }
 }
