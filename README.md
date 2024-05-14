@@ -37,5 +37,5 @@ Delete dbc.php and admin.php files so that normal users cannot access them
 cd aceBlog
 mkdir uploads
 ```
-# I have a problem or suggestion
-Contact with arshia.moharrary@gmail.com or create a pull request
+# Contact
+arshia.moharrary@gmail.com
