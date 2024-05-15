@@ -29,7 +29,7 @@ require_once "includes/connection.php";
     <div class="d-flex justify-content-center row g-1">
         <div class="col-4">
             <div class="input-group mb-3 col">
-                <input type="text" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="basic-addon2" onkeyup="search(this.value)">
+                <input type="text" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="basic-addon2" id="search">
                 <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
             </div>
         </div>
@@ -81,24 +81,35 @@ require_once "includes/connection.php";
     </div>
     <?php include "includes/footer.php" ?>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script>
-        function search(query) {
-            if (query.length == 0) {
-                document.getElementById("blogs").innerHTML = "";
-                return;
-            }
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("blogs").innerHTML = this.responseText;
-                }
-            }
-            xmlhttp.open("GET", "search.php?q=" + query, true);
-            xmlhttp.send();
-        }
-    </script>
     <!--  JQuery  -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script>
+        $("#search").keyup(function () {
+            // Values
+            let query = $(this).val();
+
+            // Container of searched blogs
+            let result = $("#blogs");
+
+            // Check query isn't empty
+            if (query.length == 0) {
+                result.html("");
+                return;
+            }
+
+            // Send ajax request
+            $.ajax(
+                {
+                    url: "search.php",
+                    data: {q: query},
+                    method: "get",
+                    success: function (response) {
+                        result.html(response);
+                    }
+                }
+            )
+        })
+    </script>
 </body>
 
 </html>
