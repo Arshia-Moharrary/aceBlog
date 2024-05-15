@@ -32,7 +32,7 @@
     <div id="message"></div>
     <script src="../../js/bootstrap.bundle.min.js"></script>
     <!--  JQuery  -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script>
         $(document).ready(function () {
             $("#login").submit(function (event) {
