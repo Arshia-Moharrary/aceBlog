@@ -97,6 +97,8 @@ require_once "includes/connection.php";
             xmlhttp.send();
         }
     </script>
+    <!--  JQuery  -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </body>
 
 </html>
