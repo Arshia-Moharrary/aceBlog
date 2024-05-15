@@ -1,9 +1,3 @@
-<link rel="stylesheet" href="../../css/bootstrap.min.css">
-<style>
-    body {
-        padding: 10px;
-    }
-    </style>
 <?php
 
 // Start session
@@ -33,7 +27,6 @@ function test_input($input) {
 // Check user is not login
 if (isset($_SESSION["user_id"])) {
     echo error("You are logged in website, Please logout of your account to create a new account");
-    echo button("danger", "/", "Back to home");
     exit;
 }
 
@@ -185,8 +178,8 @@ if (count($message) === 0) {
         // Bind param and execute
         $stmt->execute([$username, $email, $password, "enable", "user"]);
 
-        echo success("Sign up successfully");
-        echo button("success", "/", "Back to home");
+        // Redirect
+        echo redirect("/");
 
         // Set session for user
         $_SESSION["user_id"] = $conn->lastInsertId();
