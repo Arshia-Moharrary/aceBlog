@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="../css/bootstrap.min.css">
 <style>
     body {
         padding: 10px;
