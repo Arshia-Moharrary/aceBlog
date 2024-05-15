@@ -30,7 +30,6 @@ $password = test_input($_POST["password"]);
 // Check user logged in
 if (isset($_SESSION["user_id"])) {
     echo error("You are currently logged in");
-    echo button("danger", "/", "Back to home");
     exit;
 }
 
@@ -114,12 +113,12 @@ if (count($message) === 0) {
         if ($result["pass"] === $password && $result["email"] === $email) {
             // Login is successfully
             $_SESSION["user_id"] = $result["id"];
-            echo success("Login successfully");
-            echo button("success", "/", "Back to home");
+
+            // Redirect
+            echo redirect("/");
         } else {
             // Login is failed because password or email doesn't match
             echo error("Your password is incorrect");
-            echo button("danger", "/users/login/", "Back");
         }
     } else {
         echo error("There is no account (Please <a href='/users/signup/'>sign up</a>)");
