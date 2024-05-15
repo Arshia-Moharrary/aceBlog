@@ -14,3 +14,8 @@ function success($val) {
 function button($status, $link, $val) {
     return "<a class='btn btn-{$status}' href='$link'>{$val}</a>";
 }
+
+// Return redirect
+function redirect($link) {
+    return "<script>window.location.href = '{$link}'</script>";
+}
